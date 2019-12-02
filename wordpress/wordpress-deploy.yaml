@@ -1,0 +1,102 @@
+
+# Creating persistent volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: k8s-master-nfs-pv1
+  labels:
+    type: nfs-pv
+
+spec:
+  storageClassName: nfs-peristent-volume
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: kube-master.lab.net
+    path: "/storage/persistent-volumes/pv1"
+
+
+---
+# Creating persistent volume claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wp-data-volume
+  labels:
+    type: nfs-pvc
+spec:
+  storageClassName: nfs-peristent-volume
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-deploy
+  labels:
+    app: wordpress
+    role: webserver
+    tier: frontend
+
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      role: webserver
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        role: webserver
+        tier: frontend
+    spec:
+      containers:
+      - image: wordpress:latest
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: mysql-svc
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-cred-hf2bd7k8k6
+              key: password
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-web-data
+          mountPath: /var/www/html
+      volumes:
+      - name: wordpress-web-data
+        persistentVolumeClaim:
+          claimName: wp-data-volume
+
+---
+# Expose to Public
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-lb-svc
+  labels:
+    app: wordpress
+    tier: frontend
+
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: wordpress
+    tier: frontend
+

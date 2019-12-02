@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user1
+  namespace: 89912-dev
+data:
+  first.name: "Ramkumar"
+  last.name: " M M"

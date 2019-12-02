@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: httpd-ds
+
+spec:
+  selector:
+    matchLabels:
+      name: httpd-ds
+  template:
+    metadata:
+      labels:
+        name: httpd-ds
+    spec:
+      containers:
+      - image: docker.io/httpd:latest
+        name: httpd      
+      nodeSelector:
+        node: k2

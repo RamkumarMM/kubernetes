@@ -1,0 +1,73 @@
+# We need a volume bind to attach to the pods, so creating that using dynamic nfs 
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-nfs-pv1
+spec:
+  storageClassName: nfs-dynamic-volume
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+
+
+---
+# Creating the Init & POD
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: webapp-deploy
+  labels:
+    run: nginx
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: nginx
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      volumes:
+      - name: web-volume
+        persistentVolumeClaim:
+          claimName: pvc-nfs-pv1
+      initContainers:
+      - name: busybox
+        image: busybox
+        volumeMounts:
+        - name: web-volume
+          mountPath: /nginxdata
+        command: [ "/bin/sh"]
+        args: [ "-c", "echo '<h1> Message from Init Container \n By Ram</h1>' > /nginxdata/index.html"]
+
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: web-volume
+          mountPath: /usr/share/nginx/html
+
+
+---
+## Exposing the webservice to hostport on the node 
+apiVersion: v1
+kind: Service
+metadata:
+  name: webservice
+  labels:
+    run: nginx
+
+spec:
+  selector:
+    run: nginx
+  type: NodePort
+  ports:
+  - nodePort: 31000
+    port: 80
+    targetPort: 80
+  

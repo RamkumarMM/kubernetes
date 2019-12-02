@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: echo-cron
+spec:
+  schedule: "* * * * *"
+  #concurrencyPolicy: Allow | Forbid | Replace 
+  suspend: true
+  jobTemplate:
+    spec:
+     template:
+       spec:
+         containers:
+         - name: welcome
+           image: busybox
+           command: [ "echo", "Message from cronjob demo" ]
+         restartPolicy: Never

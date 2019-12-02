@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: echo-job
+
+spec:
+  #backoffLimit: 2
+  #completions: 5
+  #parallelism: 2
+  template:
+    metadata:
+      name: echo-job
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: [ "echo", "Ram" ]
+      restartPolicy: Never
+  completions: 1

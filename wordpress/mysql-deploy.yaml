@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  labels:
+    app: mysql-wp
+    role: database
+    tier: backend
+spec:
+  ports:
+    - port: 3306
+  type: ClusterIP
+  selector:
+    app: mysql-wp
+    role: database
+    tier: backend
+
+---
+## PV Creation
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: k8s-master-nfs-pv0
+  labels:
+    type: nfs-pv
+spec:
+  storageClassName: nfs-peristent-volume
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: kube-master.lab.net
+    path: "/storage/persistent-volumes/pv0"
+
+---
+## PVC creation
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-data-volume
+  labels:
+    type: nfs-pvc
+spec:
+  storageClassName: nfs-peristent-volume
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+
+---
+## MySQL Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: mysql-database
+  labels:
+    app: mysql-wp
+    role: database
+    tier: backend
+spec:
+  selector:
+    matchLabels:
+      app: mysql-wp
+      role: database
+      tier: backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql-wp
+        role: database
+        tier: backend
+    spec:
+      containers:
+      - image: docker.io/mysql:5.6
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-cred-hf2bd7k8k6
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql/
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql-data-volume
