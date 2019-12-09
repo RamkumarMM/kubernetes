@@ -2,8 +2,8 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 
 # Lab Setup:
 
-### Host OS : Windows 10 
-### Hypervisor : VMWare Workstation 12.x
+##### Host OS : Windows 10 
+##### Hypervisor : VMWare Workstation 12.x
 
 # Virtual Servers:
 
