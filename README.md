@@ -149,7 +149,7 @@ docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest
 * ---------------------  All the above steps should be followed on all nodes ---------------------------------- *
 
        
-### 2. Configuring Kubenetes Master:
+### 2. Configuring Kubernetes Master:
 
 * Login to your master node ` # ssh root@kube-master.lab.net `
 * Pull the kubernetes cluster images ` # kubeadm config images pull ` ---> This will pull all the images required to install & config kube cluster
@@ -174,3 +174,75 @@ rolebinding.rbac.authorization.k8s.io/weave-net created
 daemonset.apps/weave-net created
 [root@kube-master ~]#
 ```
+* Check all cluster related pods were up & running
+```
+[root@kube-master ~]# kubectl get pod --all-namespaces
+NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
+kube-system   coredns-5644d7b6d9-6cnwc                      1/1     Running   0          10m
+kube-system   coredns-5644d7b6d9-brzh6                      1/1     Running   0          10m
+kube-system   etcd-kube-master.lab.net                      1/1     Running   0          10m
+kube-system   kube-apiserver-kube-master.lab.net            1/1     Running   0          9m57s
+kube-system   kube-controller-manager-kube-master.lab.net   1/1     Running   0          10m
+kube-system   kube-proxy-fz5qz                              1/1     Running   0          10m
+kube-system   kube-scheduler-kube-master.lab.net            1/1     Running   0          9m47s
+kube-system   weave-net-hxd9s                               2/2     Running   0          2m14s
+[root@kube-master ~]#
+```
+
+
+### 3. Configuring Kubernetes Worker Node:
+* Create VM for kube-worker nodes by following the procedure mentioned on 1. Building the Virtual Servers
+* Join the worker node to kubernetes cluster 
+```
+[root@kube-worker-1 ~]# kubeadm join 192.168.58.200:6443 --token jqzm4t.3xxxxxxxxxxanoa --discovery-token-ca-cert-hash sha256:xxxxxxxxxxxxxxxxxxxxxx 
+```
+* Repeat this on all your worker nodes
+
+### 4. Kubernetes cluster status:
+* Now we have configured our cluster, Please do check the status of your cluster by follow command
+```
+[root@kube-master ~]# kubectl get nodes
+NAME                    STATUS   ROLES    AGE    VERSION
+kube-master.lab.net     Ready    master   137m   v1.16.2
+kube-worker-1.lab.net   Ready    <none>   23m    v1.16.2
+kube-worker-2.lab.net   Ready    <none>   21m    v1.16.2
+kube-worker-3.lab.net   Ready    <none>   4m5s   v1.16.2
+[root@kube-master ~]#
+```
+* List of pods running on kube-master 
+```
+[root@kube-master ~]# kubectl get pods --all-namespaces -o wide
+NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE     IP               NODE                    NOMINATED NODE   READINESS GATES
+kube-system   coredns-5644d7b6d9-6cnwc                      1/1     Running   1          139m    10.32.0.2        kube-master.lab.net     <none>           <none>
+kube-system   coredns-5644d7b6d9-brzh6                      1/1     Running   1          139m    10.32.0.3        kube-master.lab.net     <none>           <none>
+kube-system   etcd-kube-master.lab.net                      1/1     Running   1          138m    192.168.58.200   kube-master.lab.net     <none>           <none>
+kube-system   kube-apiserver-kube-master.lab.net            1/1     Running   1          138m    192.168.58.200   kube-master.lab.net     <none>           <none>
+kube-system   kube-controller-manager-kube-master.lab.net   1/1     Running   1          138m    192.168.58.200   kube-master.lab.net     <none>           <none>
+kube-system   kube-proxy-7hxfr                              1/1     Running   0          25m     192.168.58.201   kube-worker-1.lab.net   <none>           <none>
+kube-system   kube-proxy-d6xn7                              1/1     Running   0          22m     192.168.58.202   kube-worker-2.lab.net   <none>           <none>
+kube-system   kube-proxy-fz5qz                              1/1     Running   1          139m    192.168.58.200   kube-master.lab.net     <none>           <none>
+kube-system   kube-proxy-hdjg5                              1/1     Running   0          5m48s   192.168.58.203   kube-worker-3.lab.net   <none>           <none>
+kube-system   kube-scheduler-kube-master.lab.net            1/1     Running   1          137m    192.168.58.200   kube-master.lab.net     <none>           <none>
+kube-system   weave-net-hxd9s                               2/2     Running   2          130m    192.168.58.200   kube-master.lab.net     <none>           <none>
+kube-system   weave-net-nvhjb                               2/2     Running   1          22m     192.168.58.202   kube-worker-2.lab.net   <none>           <none>
+kube-system   weave-net-tbdmz                               2/2     Running   3          25m     192.168.58.201   kube-worker-1.lab.net   <none>           <none>
+kube-system   weave-net-z8wjr                               2/2     Running   0          5m48s   192.168.58.203   kube-worker-3.lab.net   <none>           <none>
+[root@kube-master ~]#
+```
+* List of pods' running on each worker node
+```
+[root@kube-master ~]# kubectl get pods --all-namespaces -o wide | grep kube-worker-1
+[root@kube-master ~]# kubectl get pods --all-namespaces -o wide | grep kube-worker-2
+[root@kube-master ~]# kubectl get pods --all-namespaces -o wide | grep kube-worker-3
+```
+* On each worker node below containers were downloaded and they will be auto-run during every reboot
+```
+[root@kube-worker-1 ~]# docker images
+REPOSITORY                        TAG                 IMAGE ID            CREATED             SIZE
+k8s.gcr.io/kube-proxy             v1.16.2             8454cbe08dc9        4 days ago          86.1 MB
+docker.io/weaveworks/weave-kube   2.5.2               f04a043bb67a        5 months ago        148 MB
+docker.io/weaveworks/weave-npc    2.5.2               5ce48e0d813c        5 months ago        49.6 MB
+k8s.gcr.io/pause                  3.1                 da86e6ba6ca1        22 months ago       742 kB
+[root@kube-worker-1 ~]#
+```
+* At this point, you should have your kubernetes cluster up & running successfully with your working nodes 
