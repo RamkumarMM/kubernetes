@@ -99,6 +99,9 @@ docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest
 
 
 # Installing & Configuring Kubernetes cluster:
+
+### 1. Building the Virtual Servers:
+
 * Create VM for kube-master & kube-worker nodes with below file system strucure
 ```    
        /boot         => 200MB
@@ -110,6 +113,21 @@ docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest
 * I used weave-net as my cluster network
 * Your Host should not have swap space, Please comment it on /etc/fstab
    ` #/dev/mapper/roovg-swaplv swap                    swap    defaults        0 0   `
+* Configure kubernetes repository, it has docker packages as well 
+```
+    [root@docker-registry ~]# cat /etc/yum.repos.d/kubernetes.repo
+    [kubernetes]
+    name=Kubernetes
+    baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    enabled=1
+    gpgcheck=1
+    repo_gpgcheck=1
+    gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+           https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    [root@docker-registry ~]#
+```
+* Install docker & kubernetes ` yum install kubeadm docker –y `
+* Set the auto startup ` systemctl restart docker && systemctl enable docker `
 * Disable firewall, iptables & selinux on your Host
 ```
        a. systemctl disable firewalld && systemctl stop firewalld
@@ -131,5 +149,28 @@ docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest
 * ---------------------  All the above steps should be followed on all nodes ---------------------------------- *
 
        
+### 2. Configuring Kubenetes Master:
 
-
+* Login to your master node ` # ssh root@kube-master.lab.net `
+* Pull the kubernetes cluster images ` # kubeadm config images pull ` ---> This will pull all the images required to install & config kube cluster
+* After this, i would suggest to shutdown your VM and convert this as an OVF file. This saves lots of time while doing other exercises
+* Power on your VM
+* Run the cluster creation command ` [root@kube-master ~]# kubeadm init `  ---> At the end of this command it will give you the command to joining command like: ` kubeadm join 192.168.58.200:6443 --token jqzm4t.3xxxxxxxxxxanoa --discovery-token-ca-cert-hash sha256:xxxxxxxxxxxxxxxxxxxxxx `
+* Set the kubernetes config on wherever you want to run the commands. either root or your own non-root user ID
+```
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+* Deploy the POD communication network weave-net
+```
+[root@kube-master ~]# export kubever=$(kubectl version | base64 | tr -d '\n')
+[root@kube-master ~]# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
+serviceaccount/weave-net created
+clusterrole.rbac.authorization.k8s.io/weave-net created
+clusterrolebinding.rbac.authorization.k8s.io/weave-net created
+role.rbac.authorization.k8s.io/weave-net created
+rolebinding.rbac.authorization.k8s.io/weave-net created
+daemonset.apps/weave-net created
+[root@kube-master ~]#
+```
