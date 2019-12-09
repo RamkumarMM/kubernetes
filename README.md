@@ -7,4 +7,4 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 
 # Virtual Servers:
 
-![Image of lab](https://github.com/RamkumarMM/kubernetes/blob/master/lab.JPG)
+![Image of lab](https://github.com/RamkumarMM/kubernetes/blob/master/images/lab-details.jpg)
