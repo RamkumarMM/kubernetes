@@ -12,3 +12,9 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 # Virtual Servers:
 
 ![Image of lab](https://github.com/RamkumarMM/kubernetes/blob/master/images/lab-details.jpg)
+
+
+# Installing & Configuring Docker Private Registry:
+
+* Create an CentOS 7 Virtual Server and make sure you have /var/lib as a separate Logical Volume
+* Docker images will be maintained under /var/lib, so ensure it has enough space
