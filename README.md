@@ -2,9 +2,11 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 
 # Lab Setup:
 
-Host OS : Windows 10 
-Hypervisor : VMWare Workstation 12.x
+### Host OS : Windows 10 
+### Hypervisor : VMWare Workstation 12.x
+
 # Virtual Servers:
+
 S.No	FQDN	vCPU 	Memory	HDD	IP Address	Routing	Role
 1	kube-master.lab.net	4	4 GB	20 GB	192.168.58.200	NAT to vmnet2 (public)	k8s master
 2	kube-worker-1.lab.net	4	4 GB	10 GB	192.168.58.201	NAT to vmnet2 (public)	k8s worker node
