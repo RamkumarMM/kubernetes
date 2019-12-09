@@ -17,7 +17,7 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 # Installing & Configuring Docker Private Registry:
 ##### Hostname: docker-registry.lab.net
 
-##### Installation:
+#### 1. Installation:
 * Create an CentOS 7 Virtual Server and make sure you have /var/lib as a separate Logical Volume
 * Docker images will be maintained under /var/lib, so ensure it has enough space
 * Configure kubernetes repository, it has docker packages as well 
@@ -36,11 +36,11 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 * Install docker engine by ` yum install docker -y `
 * Enable & start docker service ` systemctl enable docker && systemctl start docker `
 
-##### Creating Private Repo:
+#### 2. Creating Private Repo:
 * Pull the registry image from docker hub ` docker pull registry `
 * Run the docker registry container ` docker run -d -p 5000:5000 --restart always --name registry registry:2 `
 
-##### Uploading an container image in Private Repo:
+#### 3. Uploading an container image in Private Repo:
 * Pull the image from online ` docker pull nginx`
 * Tag it to your local repo 
 ```
@@ -50,7 +50,7 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
    # docker rmi nginx
 ```
 
-##### Configuring kubernetes worker node pointing to your private docker registry:
+#### 4. Configuring kubernetes worker node pointing to your private docker registry:
 ###### Method-1:
 * Create file ` vi /etc/docker/daemon.json`
 ```
@@ -86,3 +86,9 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 ```
 * Reload the daemon ` systemctl daemon-reload `
 * Restart docker daemon ` systemct restart docker`
+
+#### 5. Running an container from private registory:
+* Lets run the nginx container from private registory
+`` docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest ``
+* Access your worker node from web browser to confirm nginx is loading.
+`` http://kube-worker-1.lab.net ``
