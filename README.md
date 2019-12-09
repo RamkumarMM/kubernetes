@@ -103,6 +103,19 @@ docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest
 ## Kubernetes Architecture
 ![Image of Kubenetes Architecure](https://github.com/RamkumarMM/kubernetes/blob/master/images/k8s-architecture.jpg)
 
+### Kubernetes Master Components:
+* API Server: It kind of gatekeeper for entire cluster, To query any kubernetes object it has to go through API server
+* Scheduler: It is responsible for physically scheduling pods across the nodes inside the cluster
+* Controller: It is responsible for overall health of entire cluster, it ensures nodes are up & running and correct no.of pods are running on each nodes as mentioned in the SPEC file
+* etcd: It the kubernetes centralized database to store the entire kubernetes configuration, including objects it’s creating, secrets and more. It’s  key-value database, any component in kubernetes can query etcd to understand the state of the cluster in real-time
+
+### Kubernetes Worker Node Components:
+* Kubelet: It’s the primary node agent that runs on each worker nodes in the cluster. It looks at the pod spec that was submitted to the API server on master and ensure that the containers described in the pod specs are running and health. Incase if kubelet notices any failures in the pods running in the worker node then it tries to restart the pods on the same worker node. 
+* Kube-proxy: It’s an critical element inside the cluster, its responsible for maintaining the entire networking configuration. It’s essentially maintains the distributed networks across all the nodes, all the pods, and across all containers and it also expose the services to the outside world on the internet
+* Pod: Its an basically an scheduling unit in the kubernets, just like VM in VMWare. Each pod consists of one or more container, in most cases one contains. Primary advantage of pod is multiple dependent containers together and it acts as a wrapper around this containers. 
+* Container: It provides the run-time environment for your application, so you run containerized applications process inside these containers
+
+
 ### 1. Building the Virtual Servers:
 
 * Create VM for kube-master & kube-worker nodes with below file system strucure
@@ -249,3 +262,5 @@ k8s.gcr.io/pause                  3.1                 da86e6ba6ca1        22 mon
 [root@kube-worker-1 ~]#
 ```
 * At this point, you should have your kubernetes cluster up & running successfully with your working nodes 
+
+
