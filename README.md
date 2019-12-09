@@ -17,6 +17,7 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 # Installing & Configuring Docker Private Registry:
 ##### Hostname: docker-registry.lab.net
 
+##### Installation:
 * Create an CentOS 7 Virtual Server and make sure you have /var/lib as a separate Logical Volume
 * Docker images will be maintained under /var/lib, so ensure it has enough space
 * Configure kubernetes repository, it has docker packages as well 
@@ -35,3 +36,6 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 * Install docker engine by ` yum install docker -y `
 * Enable & start docker service ` systemctl enable docker && systemctl start docker `
 
+##### Creating Private Repo:
+* Pull the registry image from docker hub ` docker pull registry `
+* Run the docker registry container ` docker run -d -p 5000:5000 --restart always --name registry registry:2 `
