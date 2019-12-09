@@ -2,6 +2,9 @@
 
 Pod is an atomic unit of scheduling
 
+## POD Diagram
+
+![Image of POD](https://github.com/RamkumarMM/kubernetes/blob/master/images/pod.jpg)
 
 ## POD Deployment
 * First we have to write the pod manifest file which consists of  container images that we are about to deploy and submit to the API Server
