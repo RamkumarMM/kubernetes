@@ -100,6 +100,9 @@ docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest
 
 # Installing & Configuring Kubernetes cluster:
 
+## Kubernetes Architecture
+![Image of Kubenetes Architecure](https://github.com/RamkumarMM/kubernetes/blob/master/images/k8s-architecture.jpg)
+
 ### 1. Building the Virtual Servers:
 
 * Create VM for kube-master & kube-worker nodes with below file system strucure
