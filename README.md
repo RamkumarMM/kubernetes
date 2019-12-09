@@ -31,6 +31,6 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
            https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
     [root@docker-registry ~]#
 ```
-* Install docker engine by # yum install docker -y
-* Enable & start docker service # systemctl enable docker && systemctl start docker
+* Install docker engine by ` yum install docker -y `
+* Enable & start docker service ` systemctl enable docker && systemctl start docker `
 
