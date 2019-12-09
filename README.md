@@ -94,3 +94,42 @@ docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest
 ```
 * Access your worker node from web browser to confirm nginx is loading.
 `` http://kube-worker-1.lab.net ``
+
+
+
+
+# Installing & Configuring Kubernetes cluster:
+* Create VM for kube-master & kube-worker nodes with below file system strucure
+```    
+       /boot         => 200MB
+       /             => 3 GB
+       swap          => 100MB
+       /var/lib      => 5 GB    --------------> This is were all our work-load will run, so it should be separate lv 
+```
+* I have followed the URL : https://www.linuxtechi.com/install-kubernetes-1-7-centos7-rhel7/ and below are some of the things to high-light
+* I used weave-net as my cluster network
+* Your Host should not have swap space, Please comment it on /etc/fstab
+   ` #/dev/mapper/roovg-swaplv swap                    swap    defaults        0 0   `
+* Disable firewall, iptables & selinux on your Host
+```
+       a. systemctl disable firewalld && systemctl stop firewalld
+       b. systemctl disable iptables && systemctl disable iptables
+       c. sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+```
+* Enable docker service ` systemctl enable docker ` 
+* Reboot the host
+* Add the sysctl entries on your node
+```
+       # echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+       # vi /etc/sysctl.conf 
+              net.bridge.bridge-nf-call-ip6tables = 1
+              net.bridge.bridge-nf-call-iptables = 1
+              net.bridge.bridge-nf-call-arptables = 1
+       #
+```
+* Reboot the host
+* ---------------------  All the above steps should be followed on all nodes ---------------------------------- *
+
+       
+
+
