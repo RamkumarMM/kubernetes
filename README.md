@@ -39,3 +39,13 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 ##### Creating Private Repo:
 * Pull the registry image from docker hub ` docker pull registry `
 * Run the docker registry container ` docker run -d -p 5000:5000 --restart always --name registry registry:2 `
+
+##### Uploading an container image in Private Repo:\
+* Pull the image from online ` docker pull nginx`
+* Tag it to your local repo 
+```
+   # docker pull nginx
+   # docker tag nginx docker-registry.lab.net:5000/nginx:latest
+   # docker push docker-registry.lab.net:5000/nginx:latest
+   # docker rmi nginx
+```
