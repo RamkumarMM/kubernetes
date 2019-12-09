@@ -112,7 +112,6 @@ docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest
 ### Kubernetes Worker Node Components:
 * Kubelet: It’s the primary node agent that runs on each worker nodes in the cluster. It looks at the pod spec that was submitted to the API server on master and ensure that the containers described in the pod specs are running and health. Incase if kubelet notices any failures in the pods running in the worker node then it tries to restart the pods on the same worker node. 
 * Kube-proxy: It’s an critical element inside the cluster, its responsible for maintaining the entire networking configuration. It’s essentially maintains the distributed networks across all the nodes, all the pods, and across all containers and it also expose the services to the outside world on the internet
-* Pod: Its an basically an scheduling unit in the kubernets, just like VM in VMWare. Each pod consists of one or more container, in most cases one contains. Primary advantage of pod is multiple dependent containers together and it acts as a wrapper around this containers. 
 * Container: It provides the run-time environment for your application, so you run containerized applications process inside these containers
 
 
