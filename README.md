@@ -5,9 +5,9 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 ##### Host OS : Windows 10 
 ##### Hypervisor : VMWare Workstation 12.x
 ##### Hardware Spec: 
-######     CPU: Intel i7-4600 CPU @ 2.10 GHz 3rd Gen 
-######     RAM: 16 GB
-######     HDD: 256 GB SSD
+       CPU: Intel i7-4600 CPU @ 2.10 GHz 3rd Gen 
+       RAM: 16 GB
+       HDD: 256 GB SSD
 
 # Virtual Servers:
 
@@ -89,6 +89,8 @@ This documentation has been prepared as part of my Kubernetes learning and i tri
 
 #### 5. Running an container from private registory:
 * Lets run the nginx container from private registory
-`` docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest ``
+```
+docker run -d -p 80:80 docker-registry.lab.net:5000/nginx:latest 
+```
 * Access your worker node from web browser to confirm nginx is loading.
 `` http://kube-worker-1.lab.net ``
