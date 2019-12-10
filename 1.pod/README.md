@@ -28,3 +28,18 @@ nfs-client-provisioner-6f689974cb-f5wn5   1/1     Running   3          7d20h   1
 nginx-pod                                 1/1     Running   0          35s     10.44.0.2   kube-worker-1.lab.net   <none>           <none>
 [root@kube-master ~]#
 ```
+
+* Deleting the pod
+```
+[root@kube-master 1.pod]# kubectl delete -f nginx-pod-sample.yaml
+pod "nginx-pod" deleted
+[root@kube-master 1.pod]#
+```
+
+* With in few seconds your nginx pod will disappear from your cluster
+```
+[root@kube-master ~]# kubectl get pods -o wide
+NAME                                      READY   STATUS    RESTARTS   AGE     IP          NODE                    NOMINATED NODE   READINESS GATES
+nfs-client-provisioner-6f689974cb-f5wn5   1/1     Running   3          7d21h   10.44.0.1   kube-worker-1.lab.net   <none>           <none>
+[root@kube-master ~]#
+```
