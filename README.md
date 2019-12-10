@@ -267,3 +267,9 @@ k8s.gcr.io/pause                  3.1                 da86e6ba6ca1        22 mon
 ## Let's start exploring various kubernetes components 
 
 ### 1. POD: https://github.com/RamkumarMM/kubernetes/blob/master/1.pod/README.md
+
+**Guys, I have gone through most of the basic topis and right now i am practising Ingress. So i though of creating documentation which practising my lab exercises and i will create missing concepts during weekend**
+
+# Advance Topics 
+
+### Ingress: https://github.com/RamkumarMM/kubernetes/blob/master/ingress/README.md
