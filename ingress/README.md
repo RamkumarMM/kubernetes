@@ -142,8 +142,15 @@ kubernetes     ClusterIP   10.96.0.1      <none>        443/TCP   16d
 nginx-deploy   ClusterIP   10.98.63.174   <none>        80/TCP    16s
 [root@kube-master 1.pod]#
 ```
+# 4. Create the Ingress rule
+* Refer the ingress rule file available in the repository to create the rule
+```
+[root@kube-master ingress]# kubectl create -f ingress-rule-1.yaml
+ingress.extensions/ingress-rule-1 created
+[root@kube-master ingress]#
 
-# 4. Access the Nginx WebApp
+```
+# 5. Access the Nginx WebApp
 * Spoof your haproxy in your windows drivers/etc/hosts file
 ```
 192.168.58.200	kube-master.lab.net		kube-master		km
