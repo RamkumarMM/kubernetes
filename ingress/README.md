@@ -1,4 +1,4 @@
-Run the below commands to create nginx-controller on your cluster 
+Run the below commands to create nginx-controller on your cluster and corresponding yaml files are available in the repository 
 
 ```
 kubectl create -f base/ns-and-sa.yaml
