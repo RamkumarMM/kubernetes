@@ -254,3 +254,12 @@ Events:
 192.168.58.200  blue.nginx.lab.net
 192.168.58.200  green.nginx.lab.net
 ```
+
+* Open NGINX WebApp Browser and hit ` http://nginx.lab.net `
+![Image of nginx](https://github.com/RamkumarMM/kubernetes/blob/master/images/nginx.jpg)
+
+* Open NGINX Blue WebApp Browser and hit ` http://blue.nginx.lab.net `
+![Image of nginx-blue](https://github.com/RamkumarMM/kubernetes/blob/master/images/nginx-blue.jpg)
+
+* Open NGINX Green WebApp Browser and hit ` http://green.nginx.lab.net `
+![Image of nginx-green](https://github.com/RamkumarMM/kubernetes/blob/master/images/nginx-green.jpg)
