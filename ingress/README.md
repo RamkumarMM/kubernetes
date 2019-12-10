@@ -143,3 +143,16 @@ nginx-deploy   ClusterIP   10.98.63.174   <none>        80/TCP    16s
 [root@kube-master 1.pod]#
 ```
 
+# 4. Access the Nginx WebApp
+* Spoof your haproxy in your windows drivers/etc/hosts file
+```
+192.168.58.200	kube-master.lab.net		kube-master		km
+192.168.58.201	kube-worker-1.lab.net		kube-worker-1	k1
+192.168.58.202	kube-worker-2.lab.net		kube-worker-2		k2
+192.168.58.203	kube-worker-3.lab.net		kube-worker-3		k3
+
+## To access NGINX WebApp ##
+192.168.58.200  nginx.lab.net
+```
+* Open Web Browser and hit ` http://nginx.lab.net `
+![Image of nginx](https://github.com/RamkumarMM/kubernetes/blob/master/images/nginx.jpg)
