@@ -163,3 +163,94 @@ ingress.extensions/ingress-rule-1 created
 ```
 * Open Web Browser and hit ` http://nginx.lab.net `
 ![Image of nginx](https://github.com/RamkumarMM/kubernetes/blob/master/images/nginx.jpg)
+
+# 6. Deploying couple of more Nginx WebApp
+* You can refer the nginx-blue & nginx-green deploy yaml files available in the repo
+```
+[root@kube-master ingress]# kubectl create -f nginx-blue-deploy.yaml
+deployment.apps/nginx-blue-deploy created
+[root@kube-master ingress]# kubectl create -f nginx-green-deploy.yaml
+deployment.apps/nginx-green-deploy created
+[root@kube-master ingress]#
+[root@kube-master 1.pod]# kubectl get po,deploy,rs
+NAME                                          READY   STATUS    RESTARTS   AGE
+pod/nfs-client-provisioner-6f689974cb-f5wn5   1/1     Running   3          7d23h
+pod/nginx-blue-deploy-568464fcf-49wcc         1/1     Running   0          23s
+pod/nginx-deploy-65b57cc5b-dqldx              1/1     Running   0          64m
+pod/nginx-green-deploy-5fb9c47598-hsr8s       1/1     Running   0          18s
+
+NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nfs-client-provisioner   1/1     1            1           14d
+deployment.apps/nginx-blue-deploy        1/1     1            1           23s
+deployment.apps/nginx-deploy             1/1     1            1           64m
+deployment.apps/nginx-green-deploy       1/1     1            1           18s
+
+NAME                                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/nfs-client-provisioner-6f689974cb   1         1         1       14d
+replicaset.apps/nginx-blue-deploy-568464fcf         1         1         1       23s
+replicaset.apps/nginx-deploy-65b57cc5b              1         1         1       64m
+replicaset.apps/nginx-green-deploy-5fb9c47598       1         1         1       18s
+[root@kube-master 1.pod]#
+
+```
+* Publish the nginx-blue and nginx-green services
+```
+[root@kube-master ingress]# kubectl expose deploy nginx-blue-deploy --port 80
+service/nginx-blue-deploy exposed
+[root@kube-master ingress]# kubectl expose deploy nginx-green-deploy --port 80
+service/nginx-green-deploy exposed
+[root@kube-master ingress]#
+[root@kube-master ingress]# kubectl get svc
+NAME                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+kubernetes           ClusterIP   10.96.0.1        <none>        443/TCP   16d
+nginx-blue-deploy    ClusterIP   10.97.231.207    <none>        80/TCP    12s
+nginx-deploy         ClusterIP   10.98.63.174     <none>        80/TCP    11m
+nginx-green-deploy   ClusterIP   10.103.243.123   <none>        80/TCP    7s
+[root@kube-master ingress]#
+```
+# 7. Create the Ingress rules for nginx-blue & nginx-green
+* Refer the ingress rule file available in the repository to create the rule
+```
+[root@kube-master ingress]# kubectl create -f ingress-rule-all.yaml
+ingress.extensions/ingress-rule-all created
+[root@kube-master ingress]#
+[root@kube-master ingress]# kubectl get ing
+NAME               HOSTS                                                  ADDRESS   PORTS   AGE
+ingress-rule-all   nginx.lab.net,blue.nginx.lab.net,green.nginx.lab.net             80      23s\
+[root@kube-master ingress]# kubectl describe ing ingress-rule-all
+Name:             ingress-rule-all
+Namespace:        default
+Address:
+Default backend:  default-http-backend:80 (<none>)
+Rules:
+  Host                 Path  Backends
+  ----                 ----  --------
+  nginx.lab.net
+                          nginx-deploy:80 (10.36.0.4:80)
+  blue.nginx.lab.net
+                          nginx-blue-deploy:80 (10.44.0.3:80)
+  green.nginx.lab.net
+                          nginx-green-deploy:80 (10.44.0.4:80)
+Annotations:
+Events:
+  Type    Reason          Age   From                      Message
+  ----    ------          ----  ----                      -------
+  Normal  AddedOrUpdated  43s   nginx-ingress-controller  Configuration for default/ingress-rule-all was added or updated
+  Normal  AddedOrUpdated  43s   nginx-ingress-controller  Configuration for default/ingress-rule-all was added or updated
+[root@kube-master ingress]#
+[root@kube-master ingress]#
+```
+ 
+# 8. Access the Nginx WebApp
+* Spoof your haproxy in your windows drivers/etc/hosts file
+```
+192.168.58.200	kube-master.lab.net		kube-master		km
+192.168.58.201	kube-worker-1.lab.net		kube-worker-1	k1
+192.168.58.202	kube-worker-2.lab.net		kube-worker-2		k2
+192.168.58.203	kube-worker-3.lab.net		kube-worker-3		k3
+
+## To access NGINX WebApp ##
+192.168.58.200  nginx.lab.net
+192.168.58.200  blue.nginx.lab.net
+192.168.58.200  green.nginx.lab.net
+```
