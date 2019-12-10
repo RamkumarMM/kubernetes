@@ -262,6 +262,8 @@ k8s.gcr.io/pause                  3.1                 da86e6ba6ca1        22 mon
 ```
 * At this point, you should have your kubernetes cluster up & running successfully with your working nodes 
 
+========================================================================================================================================
 
+## Let's start exploring various kubernetes components 
 
-### POD :  *https://github.com/RamkumarMM/kubernetes/blob/master/1.pod/README.md
+### 1. POD: https://github.com/RamkumarMM/kubernetes/blob/master/1.pod/README.md
