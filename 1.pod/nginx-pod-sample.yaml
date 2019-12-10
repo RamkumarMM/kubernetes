@@ -1,5 +1,5 @@
 # nginx-pod.yaml
-apiVerison: v1
+apiVersion: v1
 kind: Pod
 metadata: 
   name: nginx-pod
