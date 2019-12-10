@@ -98,3 +98,48 @@ backend http_back
 # systemctl status haproxy
 # systemctl enable haproxy
 ```
+
+# 3. Creating an NGINX WebApp
+* Use the yaml files available in the repository 
+```
+# kubectl create -f nginx-deploy.yaml
+[root@kube-master 1.pod]# kubectl get all
+NAME                                          READY   STATUS    RESTARTS   AGE
+pod/nfs-client-provisioner-6f689974cb-f5wn5   1/1     Running   3          7d21h
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   16d
+
+NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nfs-client-provisioner   1/1     1            1           13d
+
+NAME                                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/nfs-client-provisioner-6f689974cb   1         1         1       13d
+[root@kube-master 1.pod]# watch kubectl get all
+[root@kube-master 1.pod]# kubectl get all
+NAME                                          READY   STATUS    RESTARTS   AGE
+pod/nfs-client-provisioner-6f689974cb-f5wn5   1/1     Running   3          7d22h
+pod/nginx-deploy-65b57cc5b-dqldx              1/1     Running   0          51m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   16d
+
+NAME                                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nfs-client-provisioner   1/1     1            1           13d
+deployment.apps/nginx-deploy             1/1     1            1           51m
+
+NAME                                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/nfs-client-provisioner-6f689974cb   1         1         1       13d
+replicaset.apps/nginx-deploy-65b57cc5b              1         1         1       51m
+[root@kube-master 1.pod]#
+```
+* Publish the nginx deployment, By default it publish the service as "ClusterIP" which will communicate with in the cluster
+```
+# kubectl expose deploy nginx-deploy --port 80
+[root@kube-master 1.pod]# kubectl get svc
+NAME           TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+kubernetes     ClusterIP   10.96.0.1      <none>        443/TCP   16d
+nginx-deploy   ClusterIP   10.98.63.174   <none>        80/TCP    16s
+[root@kube-master 1.pod]#
+```
+
