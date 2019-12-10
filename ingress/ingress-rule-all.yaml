@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-rule-all
+spec:
+  rules:
+  - host: nginx.lab.net
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-deploy
+          servicePort: 80
+   
+  - host: blue.nginx.lab.net
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-blue-deploy
+          servicePort: 80
+
+  - host: green.nginx.lab.net
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-green-deploy
+          servicePort: 80
