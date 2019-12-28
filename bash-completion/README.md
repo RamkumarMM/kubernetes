@@ -1,6 +1,7 @@
 This document is for how to configure bash auto-completion for bash
 
-* Install the following rpm 
-    ``` # yum install bash-completion.noarch
-    ```
+# Install the following rpm 
+```
+# yum install bash-completion.noarch bash-completion-extras.noarch -y
+ ```
 
