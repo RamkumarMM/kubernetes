@@ -7,11 +7,17 @@ https://helm.sh/
 
 # Before you install helm, you workstation should have configured to access kubernetes cluster and kubectl installed on it
 * Install kubectl on your workstation
-``` [root@docker-registry]#  yum install -y kubectl ```
+``` 
+[root@docker-registry]#  yum install -y kubectl 
+```
 * Create a local user where you want to perform all your kubernetes activies
-``` [root@docker-registry]# useradd -d /home/kubeadmin -c "Kubernetes Admin User" -s /bin/bash kubeadmin ```
+``` 
+[root@docker-registry]# useradd -d /home/kubeadmin -c "Kubernetes Admin User" -s /bin/bash kubeadmin 
+```
 * Configure kubenetes cluster on your kubeadmin user
-``` [kubeadmin@docker-registry ~]$ mkdir .kube ```
+``` 
+[kubeadmin@docker-registry ~]$ mkdir .kube 
+```
 * Copy your kubenetes config on your local users ~/.kube/config
 ```
 [root@kube-master ~]# scp .kube/config  kubeadmin@docker-registry:/home/kubeadmin/.kube/config
@@ -33,7 +39,6 @@ nfs-client-provisioner-6f689974cb-t6mkk   1/1     Running   0          14d
 ```
 
 # Installing Helm on you workstation
-
 ```
 [root@docker-registry]# mkdir helm
 [root@docker-registry]# cd helm
@@ -49,5 +54,19 @@ version.BuildInfo{Version:"v3.0.2", GitCommit:"19e47ee3283ae98139d98460de796c1be
 v3.0.2+g19e47ee
 [root@docker-registry linux-amd64]#
 ```
+
+* Create tiller service account on your cluster & binding to cluster role
+```
+[kubeadmin@docker-registry ~]$ kubectl -n kube-system create serviceaccount tiller
+serviceaccount/tiller created
+[kubeadmin@docker-registry ~]$
+[kubeadmin@docker-registry ~]$ kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+clusterrolebinding.rbac.authorization.k8s.io/tiller created
+[kubeadmin@docker-registry ~]$ kubectl get clusterrolebinding tiller
+NAME     AGE
+tiller   7s
+[kubeadmin@docker-registry ~]$ 
+```
+
 
 
