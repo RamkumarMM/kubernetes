@@ -216,3 +216,28 @@ NAME         TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)        AGE
 ram-tomcat   LoadBalancer   10.100.213.248   192.168.58.220   80:32303/TCP   21s
 [root@kube-master ~]# 
 ```
+
+* Delete a application deployed using helm
+```
+[kubeadmin@docker-registry tomcat]$ helm delete ram-tomcat 
+release "ram-tomcat" uninstalled
+[kubeadmin@docker-registry tomcat]$
+```
+* On kubernetes service side you can see the deployment and its related components are removed
+```
+[root@kube-master ~]# kubectl get pods
+NAME                                      READY   STATUS        RESTARTS   AGE
+nfs-client-provisioner-6f689974cb-t6mkk   1/1     Running       0          14d
+ram-tomcat-55554dbd57-7fpzz               0/1     Terminating   0          8m57s
+[root@kube-master ~]#
+
+[root@kube-master ~]# kubectl get deploy
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+nfs-client-provisioner   1/1     1            1           45d
+[root@kube-master ~]#
+
+[root@kube-master ~]# kubectl get svc -w ram-tomcat
+Error from server (NotFound): services "ram-tomcat" not found
+[root@kube-master ~]#
+
+```
