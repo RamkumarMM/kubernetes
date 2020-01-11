@@ -176,3 +176,43 @@ Chart.yaml  README.md  templates  values.yaml
 [kubeadmin@docker-registry ~]$
 
 ```
+
+* Installing a chart using helm
+```
+[kubeadmin@docker-registry ~]$ cd tomcat
+[kubeadmin@docker-registry tomcat]$ helm  install ram-tomcat .
+NAME: ram-tomcat
+LAST DEPLOYED: Sat Jan 11 13:41:16 2020
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+1. Get the application URL by running these commands:
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get svc -w ram-tomcat'
+  export SERVICE_IP=$(kubectl get svc --namespace default ram-tomcat -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+  echo http://$SERVICE_IP:
+[kubeadmin@docker-registry tomcat]$
+
+```
+
+* On kubenetes cluster you can see pod, rc, deployment & services are created for this
+```
+[root@kube-master ~]# kubectl get deploy
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+nfs-client-provisioner   1/1     1            1           45d
+ram-tomcat               0/1     1            0           111s
+[root@kube-master ~]#
+
+[root@kube-master ~]# kubectl get pods
+NAME                                      READY   STATUS            RESTARTS   AGE
+nfs-client-provisioner-6f689974cb-t6mkk   1/1     Running           0          14d
+ram-tomcat-55554dbd57-7fpzz               0/1     PodInitializing   0          36s
+[root@kube-master ~]#
+
+[root@kube-master ~]# kubectl get svc -w ram-tomcat
+NAME         TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)        AGE
+ram-tomcat   LoadBalancer   10.100.213.248   192.168.58.220   80:32303/TCP   21s
+[root@kube-master ~]# 
+```
