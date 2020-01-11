@@ -98,4 +98,81 @@ stable/cert-manager                     v0.6.7          v0.6.2                  
 ```
 
 
+* Searching particular chart
+```
+[kubeadmin@docker-registry ~]$ helm search repo tomcat
+NAME            CHART VERSION   APP VERSION     DESCRIPTION
+stable/tomcat   0.4.1           7.0             Deploy a basic tomcat application server with s...
+[kubeadmin@docker-registry ~]$
 
+[kubeadmin@docker-registry ~]$ helm search repo jenkins
+NAME            CHART VERSION   APP VERSION     DESCRIPTION
+stable/jenkins  1.9.14          lts             Open source continuous integration server. It s...
+[kubeadmin@docker-registry ~]$
+```
+
+* Inspect a chart 
+```
+[kubeadmin@docker-registry ~]$ helm inspect chart stable/jenkins 
+apiVersion: v1
+appVersion: lts
+description: Open source continuous integration server. It supports multiple SCM tools
+  including CVS, Subversion and Git. It can execute Apache Ant and Apache Maven-based
+  projects as well as arbitrary scripts.
+home: https://jenkins.io/
+icon: https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png
+maintainers:
+- email: lachlan.evenson@microsoft.com
+  name: lachie83
+- email: viglesias@google.com
+  name: viglesiasce
+- email: maor.friedman@redhat.com
+  name: maorfr
+- email: mail@torstenwalter.de
+  name: torstenwalter
+- email: garridomota@gmail.com
+  name: mogaal
+name: jenkins
+sources:
+- https://github.com/jenkinsci/jenkins
+- https://github.com/jenkinsci/docker-jnlp-slave
+- https://github.com/maorfr/kube-tasks
+- https://github.com/jenkinsci/configuration-as-code-plugin
+version: 1.9.14
+[kubeadmin@docker-registry ~]$
+
+[kubeadmin@docker-registry ~]$ helm inspect chart stable/tomcat
+apiVersion: v1
+appVersion: "7.0"
+description: Deploy a basic tomcat application server with sidecar as web archive
+  container
+home: https://github.com/yahavb
+icon: http://tomcat.apache.org/res/images/tomcat.png
+maintainers:
+- email: ybiran@ananware.systems
+  name: yahavb
+name: tomcat
+version: 0.4.1
+[kubeadmin@docker-registry ~]$
+
+```
+
+* Downloading a chart 
+```
+[kubeadmin@docker-registry ~]$ helm fetch stable/tomcat
+[kubeadmin@docker-registry ~]$ ls
+tomcat-0.4.1.tgz
+[kubeadmin@docker-registry ~]$
+
+[kubeadmin@docker-registry ~]$ ls -lrt tomcat-0.4.1.tgz
+-rw-r--r-- 1 kubeadmin kubeadmin 4039 Jan 11 13:36 tomcat-0.4.1.tgz
+[kubeadmin@docker-registry ~]$
+[kubeadmin@docker-registry ~]$ tar -vf tomcat-0.4.1.tgz
+[kubeadmin@docker-registry ~]$
+[kubeadmin@docker-registry ~]$ ls
+tomcat  tomcat-0.4.1.tgz
+[kubeadmin@docker-registry ~]$ ls tomcat
+Chart.yaml  README.md  templates  values.yaml
+[kubeadmin@docker-registry ~]$
+
+```
