@@ -66,6 +66,10 @@ clusterrolebinding.rbac.authorization.k8s.io/tiller created
 NAME     AGE
 tiller   7s
 [kubeadmin@docker-registry ~]$ 
+[kubeadmin@docker-registry ~]$ kubectl get serviceaccount tiller -n kube-system
+NAME     SECRETS   AGE
+tiller   1         16m
+[kubeadmin@docker-registry ~]$
 ```
 
 
