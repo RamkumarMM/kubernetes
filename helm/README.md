@@ -72,5 +72,22 @@ tiller   1         16m
 [kubeadmin@docker-registry ~]$
 ```
 
+* Adding Helm respoitory 
+```
+[kubeadmin@docker-registry ~]$ helm repo list
+Error: no repositories to show
+[kubeadmin@docker-registry ~]$ 
+
+[kubeadmin@docker-registry ~]$ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+"stable" has been added to your repositories
+[kubeadmin@docker-registry ~]$
+
+[kubeadmin@docker-registry ~]$ helm repo list
+NAME    URL
+stable  https://kubernetes-charts.storage.googleapis.com/
+[kubeadmin@docker-registry ~]$
+
+```
+
 
 
