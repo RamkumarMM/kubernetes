@@ -101,3 +101,44 @@
 	```
 *** Now the Persistant Volume is created, but not bounded to any claim ***
 
+
+# Binding PV to Persistant Volume Claim
+1. Create the persistant volume claim manifest and high-lighed items are important to remember
+	```
+	apiVersion: v1
+	kind: PersistentVolumeClaim
+	metadata:
+	  name: nfs-pvc-vol-1	------------------> Name of the Persistant Volume to Bind
+	spec:
+	  storageClassName: nfsmount	----------> Name of the Storage class (Should be match with the PV manifest)
+	  accessModes:
+	    - ReadWriteMany	------------------> Access Policy (Should be match with the PV manifest, otherwise it won't bind)
+	  resources:
+	    requests:
+	      storage: 500Mi	------------------> Size of the request, Must be less then available PV size with respective policies
+	```
+
+2. Create the Persistant volume claim
+	```
+	[kubeadmin@devops-server persistent-volume]$ kubectl create -f pvc.yaml
+	persistentvolumeclaim/nfs-pvc-vol-1 created
+	[kubeadmin@devops-server persistent-volume]$
+	[kubeadmin@devops-server persistent-volume]$ kubectl get pvc
+	NAME            STATUS   VOLUME         CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+	nfs-pvc-vol-1   Bound    nfs-pv-vol-1   500Mi      RWX            nfsmount       4s
+	[kubeadmin@devops-server persistent-volume]$
+	```
+
+*** Now the PV has been binded to this claim request ***
+
+3. We can run `kubectl get pv, pvc` to see active pv and pvc
+	```
+	[kubeadmin@devops-server persistent-volume]$ kubectl get pv,pvc
+	NAME                            CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                   STORAGECLASS   REASON   AGE
+	persistentvolume/nfs-pv-vol-1   500Mi      RWX            Retain           Bound    default/nfs-pvc-vol-1   nfsmount                9m4s
+	
+	NAME                                  STATUS   VOLUME         CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+	persistentvolumeclaim/nfs-pvc-vol-1   Bound    nfs-pv-vol-1   500Mi      RWX            nfsmount       85s
+	[kubeadmin@devops-server persistent-volume]$
+	```
+	
