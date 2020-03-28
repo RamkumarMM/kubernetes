@@ -72,32 +72,32 @@
 # Creating Persistant Volume
 1. Below is our Persistant volume manifests and high-lighted iteams are important notes
 	```
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: nfs-pv-vol-1	-----------------> Name of the Persistant Volume
-  labels:
-    type: local
-spec:
-  storageClassName: nfsmount	---------> Name of the Storage Class (Should be in Lowercase)
-  capacity:
-    storage: 500Mi	-----------------> Size of the PV
-  accessModes:
-    - ReadWriteMany	-----------------> Access Policy
-  nfs:
-    server: kube-master.lab.net
-    path: /storage/persistent-volumes ---> NFS Storage Location
-```
+	apiVersion: v1
+	kind: PersistentVolume
+	metadata:
+	  name: nfs-pv-vol-1	-----------------> Name of the Persistant Volume
+	  labels:
+	    type: local
+	spec:
+	  storageClassName: nfsmount	---------> Name of the Storage Class (Should be in Lowercase)
+	  capacity:
+	    storage: 500Mi	-----------------> Size of the PV
+	  accessModes:
+	    - ReadWriteMany	-----------------> Access Policy
+	  nfs:
+	    server: kube-master.lab.net
+	    path: /storage/persistent-volumes ---> NFS Storage Location
+	```
 
 2. Create the Persistant volume 
-```
-[kubeadmin@devops-server persistent-volume]$ kubectl create -f pv.yaml
-persistentvolume/nfs-pv-vol-1 created
-[kubeadmin@devops-server persistent-volume]$
-[kubeadmin@devops-server persistent-volume]$ kubectl get pv
-NAME           CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
-nfs-pv-vol-1   500Mi      RWX            Retain           Available           nfsmount                7s
-[kubeadmin@devops-server persistent-volume]$
-```
+	```
+	[kubeadmin@devops-server persistent-volume]$ kubectl create -f pv.yaml
+	persistentvolume/nfs-pv-vol-1 created
+	[kubeadmin@devops-server persistent-volume]$
+	[kubeadmin@devops-server persistent-volume]$ kubectl get pv
+	NAME           CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+	nfs-pv-vol-1   500Mi      RWX            Retain           Available           nfsmount                7s
+	[kubeadmin@devops-server persistent-volume]$
+	```
 *** Now the Persistant Volume is created, but not bounded to any claim ***
 
