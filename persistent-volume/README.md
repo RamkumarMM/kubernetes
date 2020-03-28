@@ -142,3 +142,68 @@
 	[kubeadmin@devops-server persistent-volume]$
 	```
 	
+
+# Mapping the volume to a POD
+1. Create a POD manifests, Use the pod-deploy.yaml
+	````
+	[kubeadmin@devops-server persistent-volume]$ kubectl create -f pod-deploy.yaml
+	deployment.apps/nginx-deploy created
+	[kubeadmin@devops-server persistent-volume]$
+	[kubeadmin@devops-server persistent-volume]$ kubectl get pods
+	NAME                           READY   STATUS    RESTARTS   AGE
+	nginx-deploy-9946c5c84-sxgrg   1/1     Running   0          8s
+	[kubeadmin@devops-server persistent-volume]$
+	```
+
+2. Now check in which kube-worker node the pod has been scheduled
+	```
+	[kubeadmin@devops-server ~]$ kubectl get pod -o wide
+	NAME                           READY   STATUS    RESTARTS   AGE     IP          NODE                   NOMINATED NODE   READINESS GATES
+	nginx-deploy-9946c5c84-sxgrg   1/1     Running   0          6m58s   10.36.0.1   kube-worker2.lab.net   <none>           <none>
+	[kubeadmin@devops-server ~]$
+	```
+	So, this is scheduled on kube-worker2.lab.net host
+
+3. Logon to kube-worker2 node to check the NFS share has been mounted on it
+	```
+	[root@kube-worker2 ~]# mount | grep nfs
+	kube-master.lab.net:/storage/persistent-volumes on /var/lib/kubelet/pods/f8c4cb87-362d-497d-b979-96b7dc670ba2/volumes/kubernetes.io~nfs/nfs-pv-vol-1 type nfs4 (rw,relatime,vers=4.1,rsize=262144,wsize=262144,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.58.102,local_lock=none,addr=192.168.58.100)
+	[root@kube-worker2 ~]#
+	```
+
+# Creating index.html from nfs server
+1. Login to the NFS server and create the index.html file to be serviced via the POD
+	```
+	[root@kube-master persistent-volumes]# pwd
+	/storage/persistent-volumes
+	[root@kube-master persistent-volumes]# cat index.html
+	<h1> Welcome to my NGINX Page by Ram </h1>
+	[root@kube-master persistent-volumes]#
+
+
+# Checking the index.html accessiable inside the container
+1. Login to the container in interactive mode
+	```
+	[kubeadmin@devops-server persistent-volume]$ kubectl exec -it nginx-deploy-9946c5c84-sxgrg  -- /bin/sh
+	# ls /usr/share/nginx/html
+	index.html
+	# cat /usr/share/nginx/html/index.html
+	<h1> Welcome to my NGINX Page by Ram </h1>
+	# exit
+	[kubeadmin@devops-server persistent-volume]$
+	```
+
+
+# Expose the POD / Deployment in to a service
+1. Run the kubectl expose to expose the service
+	```
+	[kubeadmin@devops-server ~]$ kubectl expose deploy nginx-deploy --port 80 --type NodePort
+	service/nginx-deploy exposed
+	[kubeadmin@devops-server ~]$ kubectl get svc
+	NAME           TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+	kubernetes     ClusterIP   10.96.0.1      <none>        443/TCP        4h6m
+	nginx-deploy   NodePort    10.110.40.42   <none>        80:30063/TCP   4s
+	[kubeadmin@devops-server ~]$
+	```	
+
+2. Access the URL 
