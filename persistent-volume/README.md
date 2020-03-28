@@ -1,6 +1,6 @@
-### Persistent Volume
+# Persistent Volume
 
-# Configuring NFS Server
+### Configuring NFS Server
 1. Install nfs-utils on any of your Linux server to configure it as NFS Server
 	``` 
 	# yum install -y nfs-utils
@@ -40,11 +40,11 @@
 	```
 
 
-# Checking on Client Sideo
+# Checking on Client Side
 1. Install nfs-utils on kube-worker nodes
 	```
 	# yum install -y nfs-utils
-        ```
+	```
 
 2. Check the share is accessiable
 	```
