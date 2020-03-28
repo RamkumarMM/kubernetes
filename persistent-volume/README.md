@@ -207,3 +207,21 @@
 	```	
 
 2. Access the URL 
+![Image of Home Page](https://github.com/RamkumarMM/kubernetes/blob/master/images/persistant-volume-home.jpg)
+
+
+3. Update the index.html contents from NFS server and that will be immediately updated on the web page
+	```
+	[root@kube-master persistent-volumes]# cat index.html
+	<h1> Welcome to my NGINX Page by Ram </h1>
+	[root@kube-master persistent-volumes]# vi index.html
+	[root@kube-master persistent-volumes]# cat index.html
+	<h1> Welcome to my NGINX Page by Ram </h1>
+	<h1> Content served from NFS Persistant volume <h1>
+	[root@kube-master persistent-volumes]#
+	```
+
+
+4. Checking the changes on URL
+![Image of Home Page Updated](https://github.com/RamkumarMM/kubernetes/blob/master/images/persistant-volume-updated.jpg)
+
