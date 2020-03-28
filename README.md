@@ -267,6 +267,7 @@ k8s.gcr.io/pause                  3.1                 da86e6ba6ca1        22 mon
 ## Let's start exploring various kubernetes components 
 
 ### POD: https://github.com/RamkumarMM/kubernetes/blob/master/pod/README.md
+### Persistent Volume: https://github.com/RamkumarMM/kubernetes/blob/master/persistent-volume/README.md
 
 **Guys, I have gone through most of the basic topis and right now i am practising Ingress. So i though of creating documentation which practising my lab exercises and i will create missing concepts during weekend**
 
