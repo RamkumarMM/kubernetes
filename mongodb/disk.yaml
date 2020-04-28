@@ -1,0 +1,33 @@
+---
+## PV Creation
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: kube-master-nfs-mongodb
+  labels:
+    type: nfs-pv
+spec:
+  storageClassName: nfs-peristent-volume
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: kube-master.lab.net
+    path: "/storage/persistent-volumes/mongodb-data"
+
+---
+## PVC creation
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-data-volume-nfs
+  labels:
+    type: nfs-pvc
+spec:
+  storageClassName: nfs-peristent-volume
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
