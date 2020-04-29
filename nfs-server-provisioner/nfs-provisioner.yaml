@@ -27,9 +27,9 @@ spec:
             - name: NFS_SERVER
               value: kube-master.lab.net
             - name: NFS_PATH
-              value: /storage/dynamic-persistent-volume
+              value: /storage/dynamic-pv
       volumes:
         - name: nfs-client-root
           nfs:
             server: kube-master.lab.net
-            path: /storage/dynamic-persistent-volume
+            path: /storage/dynamic-pv
