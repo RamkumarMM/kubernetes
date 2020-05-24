@@ -4,7 +4,7 @@
 	``` # kubectl -n kube-system describe pod <etcd-master-pod> ```
 
 2. To take backup 
-        ``` # ETCDCTL_API=3 etcdctl snapsnot save /tmp/etcd-snapshot-backup.db \
+        * ``` # ETCDCTL_API=3 etcdctl snapsnot save /tmp/etcd-snapshot-backup.db \
           --endpoints=https://127.0.0.1:2379 \
           --cacert=/etc/etcd/ca.crt \
 	  --cert=/etc/etcd/etcd-server.crt \
