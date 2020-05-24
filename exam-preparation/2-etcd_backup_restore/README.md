@@ -20,8 +20,8 @@
 ```
 
 4. We can restore in 2 ways 
-	* Completely from command line, works only if cluster created in hard-way
-		..Step-1: 
+	..a. Completely from command line, works only if cluster created in hard-way
+		Step-1: 
 		```
 		# ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-snapshot-backup.db \
 		--data-dir=/var/lib/etcd-from-backup \
