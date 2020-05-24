@@ -1,7 +1,9 @@
 # ETCD Backup & Restore
 
 1. We have to provide CACert, etcd-cert & etcd-key file to all commands, so please node the absolute path from 
-	``` # kubectl -n kube-system describe pod <etcd-master-pod> ```
+``` 
+# kubectl -n kube-system describe pod <etcd-master-pod> 
+```
 
 2. To take backup 
 ``` # ETCDCTL_API=3 etcdctl snapsnot save /tmp/etcd-snapshot-backup.db \
