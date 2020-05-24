@@ -20,8 +20,8 @@
 ```
 
 4. We can restore in 2 ways 
-	a. Completely from command line, works only if cluster created in hard-way
-           Step-1: 
+	* a. Completely from command line, works only if cluster created in hard-way
+           * Step-1: 
 	   ``` 
 	   # ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-snapshot-backup.db \
 		--data-dir=/var/lib/etcd-from-backup \
@@ -29,12 +29,12 @@
 		--initial-cluster-token etcd-cluster-1 \
 		--initial-advertise-peer-urls https://${INTERNAL_IP}:2380 
 	   ```
-           Step-2: ``` # systemctl daemon-reload ```
-           Step-3: ``` # service kube-apiserver start ```
-	   Step-4: ``` # service etcd restart ```
+           * Step-2: ``` # systemctl daemon-reload ```
+           * Step-3: ``` # service kube-apiserver start ```
+	   * Step-4: ``` # service etcd restart ```
 
-        b. If cluster build using `kubeadm init` way, then
-	   Step-1:
+        * b. If cluster build using `kubeadm init` way, then
+	   * Step-1:
 	   ``` 
 	   # ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-snapshot-backup.db \
                   --endpoints=https://127.0.0.1:2379 \
@@ -42,10 +42,10 @@
 	          --cert=/etc/etcd/etcd-server.crt \
         	  --key=/etc/etcd/etcd-server.key
            ```
-	   Step-2: Edit /etc/kubernetes/manifests/etcd.yaml
-	   Step-3: Update "--data-dir=/var/lib/etcd" to "--data-dir=/var/lib/etcd-from-backup"
+	   * Step-2: Edit /etc/kubernetes/manifests/etcd.yaml
+	   *Step-3: Update "--data-dir=/var/lib/etcd" to "--data-dir=/var/lib/etcd-from-backup"
                    Add    "--initial-cluster-token etcd-cluster-1" 
-	   Step-4: Save the file and kubernetes will automatically initiates the etcd from backup location
+	   * Step-4: Save the file and kubernetes will automatically initiates the etcd from backup location
 	
 
 5. Now you can see the pods, services, deployments, replication sets are restored
