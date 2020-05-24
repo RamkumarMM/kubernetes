@@ -21,6 +21,14 @@
 
 4. We can restore in 2 ways 
 	* Completely from command line, works only if cluster created in hard-way
+		** Step-1: 
+		```
+		# ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-snapshot-backup.db \
+		--data-dir=/var/lib/etcd-from-backup \
+		--initial-cluster master-1=https://192.168.58.100:2380,master-2=https://192.168.58.200:2380 \
+		--initial-cluster-token etcd-cluster-1 \
+		--initial-advertise-peer-urls https://${INTERNAL_IP}:2380 
+	   	```
 	
 
 5. Now you can see the pods, services, deployments, replication sets are restored
