@@ -1,0 +1,35 @@
+[root@kube-master ~]# kubectl create -f webapp.yaml --record
+[root@kube-master ~]# kubectl create -f service.yaml
+[root@kube-master ~]# kubectl set image deploy webapp webapp=nginx:1.19.0 --record
+deployment.apps/webapp image updated
+[root@kube-master ~]#
+[root@kube-master ~]# kubectl set image deploy webapp webapp=nginx:latest --record
+deployment.apps/webapp image updated
+[root@kube-master ~]#
+
+[root@kube-master ~]# kubectl rollout history deploy webapp
+deployment.apps/webapp
+REVISION  CHANGE-CAUSE
+1         kubectl create --filename=webapp.yaml --record=true
+2         kubectl set image deploy webapp webapp=nginx:1.19.0 --record=true
+3         kubectl set image deploy webapp webapp=nginx:latest --record=true
+
+[root@kube-master ~]#
+
+[root@kube-master ~]# kubectl rollout undo deploy webapp --to-revision=1
+deployment.apps/webapp rolled back
+[root@kube-master ~]#
+
+[root@kube-master ~]# kubectl rollout history deploy webapp
+deployment.apps/webapp
+REVISION  CHANGE-CAUSE
+2         kubectl set image deploy webapp webapp=nginx:1.19.0 --record=true
+3         kubectl set image deploy webapp webapp=nginx:latest --record=true
+4         kubectl create --filename=webapp.yaml --record=true
+[root@kube-master ~]#
+
+[root@kube-master ~]# kubectl describe pod webapp | grep -i image
+    Image:          nginx:1.18.0
+    Image ID:       docker-pullable://docker.io/nginx@sha256:cc54bf7fa755cebebbe98e11da2ff3626852fc5a9db3397bdbec74339da9ff72
+  Normal  Pulled     33s        kubelet, kube-worker2.lab.net  Container image "nginx:1.18.0" already present on machine
+[root@kube-master ~]#
