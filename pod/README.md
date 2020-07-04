@@ -72,3 +72,5 @@ nginx-svc   LoadBalancer   10.102.22.71   192.168.58.220   80:32643/TCP   3m16s
 ```
 
 * Hit http://192.168.58.220 from your browser to view the web page
+![Image of POD](https://github.com/RamkumarMM/kubernetes/blob/master/images/nginx-pod-webpage.jpg)
+
