@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: ram-ns
+  labels:
+    app: nginx
+spec:
+  containers:
+  - image: docker.io/nginx:latest
+    name: nginx
+ 

@@ -43,3 +43,32 @@ NAME                                      READY   STATUS    RESTARTS   AGE     I
 nfs-client-provisioner-6f689974cb-f5wn5   1/1     Running   3          7d21h   10.44.0.1   kube-worker-1.lab.net   <none>           <none>
 [root@kube-master ~]#
 ```
+
+##############################################################################
+
+## Exposing NGINX Service
+
+### Exercise
+* Create the pod
+```
+[root@kube-master pod]# kubectl create -f nginx-pod.yaml
+pod/nginx-pod created
+[root@kube-master pod]# 
+```
+
+* Expose it as service
+```
+[root@kube-master pod]# kubectl create -f nginx-svc.yaml
+service/nginx-svc created
+[root@kube-master pod]# 
+```
+
+* To get the service IP
+```
+[root@kube-master pod]# kubectl -n ram-ns get svc
+NAME        TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
+nginx-svc   LoadBalancer   10.102.22.71   192.168.58.220   80:32643/TCP   3m16s
+[root@kube-master pod]#
+```
+
+* Hit http://192.168.58.220 from your browser to view the web page
