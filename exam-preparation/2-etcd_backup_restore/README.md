@@ -1,5 +1,8 @@
 # ETCD Backup & Restore
 
+## Install ETCDTL 
+ETCD_VERSION=`curl -s -L https://github.com/coreos/etcd/releases/latest | grep linux-amd64\.tar\.gz | grep href | cut -f 6 -d '/' | sort -u`; ETCD_DIR=/opt/etcd-$ETCD_VERSION; mkdir $ETCD_DIR;curl -L https://github.com/coreos/etcd/releases/download/$ETCD_VERSION/etcd-$ETCD_VERSION-linux-amd64.tar.gz | tar xz --strip-components=1 -C $ETCD_DIR; ln -sf $ETCD_DIR/etcd /usr/bin/etcd && ln -sf $ETCD_DIR/etcdctl /usr/bin/etcdctl; etcd --version
+
 1. We have to provide CACert, etcd-cert & etcd-key file to all commands, so please node the absolute path from 
 ``` 
 # kubectl -n kube-system describe pod <etcd-master-pod> 
