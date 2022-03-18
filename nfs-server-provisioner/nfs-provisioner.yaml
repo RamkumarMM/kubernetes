@@ -1,7 +1,21 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-storage
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: nfs-storage-provisioner
+parameters:
+  archiveOnDelete: "false"
+ram@kube-master:~/nfs-provisioner$ cat deploy-nfs-provisioner.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nfs-client-provisioner
+  labels:
+    app: nfs-client-provisioner
+  # replace with namespace where provisioner is deployed
+  namespace: default
 spec:
   replicas: 1
   strategy:
@@ -17,19 +31,19 @@ spec:
       serviceAccountName: nfs-client-provisioner
       containers:
         - name: nfs-client-provisioner
-          image: quay.io/external_storage/nfs-client-provisioner:latest
+          image: k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
           volumeMounts:
             - name: nfs-client-root
               mountPath: /persistentvolumes
           env:
             - name: PROVISIONER_NAME
-              value: kube-master.lab.net/nfs
+              value: nfs-storage-provisioner
             - name: NFS_SERVER
               value: kube-master.lab.net
             - name: NFS_PATH
-              value: /storage/dynamic-pv
+              value: /k8s-storage
       volumes:
         - name: nfs-client-root
           nfs:
             server: kube-master.lab.net
-            path: /storage/dynamic-pv
+            path: /k8s-storage
